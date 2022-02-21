@@ -30,7 +30,7 @@ class HomeViewController: UIViewController {
         let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTable.tableHeaderView = headerView
     }
-o
+
     private func configureNavbaar() {
         var image = UIImage(named: "Netflix")
         image = image?.withRenderingMode(.alwaysOriginal)
