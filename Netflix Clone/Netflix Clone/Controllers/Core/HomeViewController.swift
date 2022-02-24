@@ -39,16 +39,17 @@ class HomeViewController: UIViewController {
         
         let headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 450))
         homeFeedTable.tableHeaderView = headerView
+        
+        navigationController?.pushViewController(TitlePreviewViewController(), animated: true)
     }
 
     private func configureNavbaar() {
-        var image = UIImage(named: "bbb")
+        var image = UIImage(named: "NetflixLogo")
         image = image?.withRenderingMode(.alwaysOriginal)
         
-        // 넷플릭스 이미지 사이즈 조절 필요. 사이즈때문에 계속 가운데로 정렬되는 현상발생
-//        navigationItem.leftBarButtonItems = [
-//            UIBarButtonItem(image: image, style: .done, target: self, action: nil)
-//        ]
+        navigationItem.leftBarButtonItems = [
+            UIBarButtonItem(image: image, style: .done, target: self, action: nil)
+        ]
         
         navigationItem.rightBarButtonItems = [
             UIBarButtonItem(image: UIImage(systemName: "person"), style: .done, target: self, action: nil),
