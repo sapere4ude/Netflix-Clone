@@ -14,6 +14,7 @@ class DataPersistenceManager {
     enum DatabaseError: Error {
         case failedToSaveData
         case failedToFetchData
+        case failedToDeleteData
     }
     
     static let shared = DataPersistenceManager()
@@ -43,24 +44,39 @@ class DataPersistenceManager {
         } catch {
             completion(.failure((DatabaseError.failedToSaveData)))
         }
-
+    }
+    
+    func fetchingTitlesFromDataBase(completion: @escaping (Result<[TitleItem], Error>) -> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let context = appDelegate.persistentContainer.viewContext
         
-        func fetchingTitlesFromDataBase(completion: @escaping (Result<[TitleItem], Error>) -> Void) {
-            guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
-                return
-            }
-            let context = appDelegate.persistentContainer.viewContext
-            
-            let request: NSFetchRequest<TitleItem>
-            
-            request = TitleItem.fetchRequest()
-            
-            do {
-                let titles = try context.fetch(request)
-                completion(.success(titles))
-            } catch {
-                completion(.failure(DatabaseError.failedToFetchData))
-            }
+        let request: NSFetchRequest<TitleItem>
+        
+        request = TitleItem.fetchRequest()
+        
+        do {
+            let titles = try context.fetch(request)
+            completion(.success(titles))
+        } catch {
+            completion(.failure(DatabaseError.failedToFetchData))
+        }
+    }
+    
+    func deleteTitleWith(model: TitleItem, completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+        let context = appDelegate.persistentContainer.viewContext
+        
+        context.delete(model)   // asking the database manager to delete certain object
+        
+        do {
+            try context.save()
+            completion(.success(()))
+        } catch {
+            completion(.failure(DatabaseError.failedToDeleteData))
         }
     }
 }
